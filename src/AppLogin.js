@@ -49,8 +49,8 @@ class AppLogin extends Component {
       this.setState({
         currentUser: user,
         //showUserBoard: user.roles.includes("ROLE_USER"),
-        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+        //showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
+        //showAdminBoard: user.roles.includes("ROLE_ADMIN"),
         showInvoices: user.roles.includes("ROLE_ADMIN") || user.roles.includes("ROLE_USER") || user.roles.includes("ROLE_MODERATOR"),       
         showItems: user.roles.includes("ROLE_ADMIN") || user.roles.includes("ROLE_USER") || user.roles.includes("ROLE_MODERATOR"),
         showCustomers: user.roles.includes("ROLE_ADMIN") || user.roles.includes("ROLE_USER") || user.roles.includes("ROLE_MODERATOR"),
