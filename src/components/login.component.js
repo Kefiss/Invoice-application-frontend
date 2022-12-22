@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-
 import AuthService from "../services/auth.service";
-
 import { withRouter } from '../common/with-router';
 
 const required = value => {
@@ -16,8 +14,8 @@ const required = value => {
     );
   }
 };
-
 class Login extends Component {
+  
   constructor(props) {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
@@ -53,11 +51,11 @@ class Login extends Component {
     });
 
     this.form.validateAll();
-
+ 
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
-          this.props.router.navigate("/profile");
+          this.props.router.navigate("/");
           window.location.reload();
         },
         error => {

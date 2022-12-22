@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import UserService from "../services/user.service";
 import EventBus from "../common/EventBus";
 

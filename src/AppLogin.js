@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, Navigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -25,7 +25,15 @@ import CustomersList from "./components/CustomersList";
 import InvoicePreview from "./components/InvoicePreview";
 import UserList from "./components/UserList";
 import AddUser from "./components/AddUser";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+
+
+const isAdmin = (AuthService.getCurrentUser() != null && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
+const isModerator = (AuthService.getCurrentUser() != null && AuthService.getCurrentUser().roles.includes("ROLE_MODERATOR"))
+const isUser = (AuthService.getCurrentUser() != null && AuthService.getCurrentUser().roles.includes("ROLE_USER"))
 class AppLogin extends Component {
+  
   constructor(props) {
     super(props);
     this.logOut = this.logOut.bind(this);
@@ -192,24 +200,36 @@ class AppLogin extends Component {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/user" element={<BoardUser />} />
+            <Route path="/profile" element={isAdmin || isModerator || isUser ? <Profile /> : <Navigate to ="/login"/>} />
+            
+            {/* <Route path="/user" element={<BoardUser />} />
             <Route path="/mod" element={<BoardModerator />} />
-            <Route path="/admin" element={<BoardAdmin />} />
-            <Route path="/invoices" element={<InvoiceList />}></Route>
-            <Route path="/invoices/add/" element={<AddInvoice />}></Route>
-            <Route path="/invoices/edit/:id" element={<AddInvoice />}></Route>
-            <Route path="/invoices/invoicepreview/:id" element={<InvoicePreview />}></Route>
-        
-            <Route path="/items" element={<ItemsList />}></Route>
-            <Route path="/items/add/" element={<AddItem />}></Route>
-            <Route path="/items/edit/:id" element={<AddItem />}></Route>
-            <Route path="/customers" element={<CustomersList />}></Route>
-            <Route path="/customers/add/" element={<AddCustomer />}></Route>
-            <Route path="/customers/edit/:id" element={<AddCustomer />}></Route>
-            <Route path="/users/add/" element={<AddUser />}></Route>
-            <Route path="/users/edit/:id" element={<AddUser />}></Route>
-            <Route path="/users" element={<UserList />}></Route>
+            <Route path="/admin" element={<BoardAdmin />} /> */}
+            
+            <Route path="/invoices" element={isAdmin || isModerator || isUser ? <InvoiceList /> : <Navigate to ="/login"/>}></Route>
+            
+            <Route path="/invoices/add/" element={isAdmin || isModerator || isUser ? <AddInvoice /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/invoices/edit/:id" element={isAdmin || isModerator || isUser ? <AddInvoice /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/invoices/invoicepreview/:id" element={isAdmin || isModerator || isUser ? <InvoicePreview /> : <Navigate to ="/login"/>}></Route>
+            
+              
+            
+            
+            <Route path="/items" element={isAdmin || isModerator || isUser ? <ItemsList /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/items/add/" element={isAdmin || isModerator ? <AddItem /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/items/edit/:id" element={isAdmin || isModerator ? <AddItem /> : <Navigate to ="/login"/>}></Route>
+           
+            
+            
+            
+            <Route path="/customers" element={isAdmin || isModerator || isUser ? <CustomersList /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/customers/add" element={isAdmin || isModerator ? <AddCustomer /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/customers/edit/:id" element={isAdmin || isModerator ? <AddCustomer /> : <Navigate to ="/login"/>}></Route>
+            
+           
+            <Route path="/users/add/" element={isAdmin ? <AddUser /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/users/edit/:id" element={isAdmin ? <AddUser /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/users" element={isAdmin ? <UserList /> : <Navigate to ="/login"/>}></Route>
           </Routes>
         </div>
 

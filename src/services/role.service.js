@@ -1,4 +1,3 @@
-import httpClient from "../http-common";
 import authHeader from './auth-header';
 import axios from 'axios';
 

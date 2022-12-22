@@ -31,4 +31,4 @@ const getPublicContent = () => {
   const remove = (id) => {
     return axios.delete(API_URL + `users/${id}`, { headers: authHeader() });
   };
-  export default { getAll, create, get, update, remove, getPublicContent };
+  export default { getAll, create, get, update, remove, getPublicContent};

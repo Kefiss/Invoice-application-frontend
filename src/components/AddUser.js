@@ -1,39 +1,23 @@
 import React from "react";
-import { createRoutesFromElements, Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {useEffect, useState} from "react";
 import userService from "../services/user.service";
 import Select from "react-select"
 import roleService from "../services/role.service";
 
 const AddUser = () => {
-  const [username, setUsername] = useState('');//
+    const [username, setUsername] = useState('');
     const [roles, setRoles] = useState([]);
-    const [roless, setRoless] = useState([]);
-    const [email, setEmail] = useState('');//
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [passwordTemp, setPasswordTemp] = useState('');
     const [roleList, setRoleList] = useState([]);
-    // const [adresas, setAddress] = useState('');
-    // const [telNumeris, setPhone] = useState('');
-    // const [klientoStatusas, setCustomerStatus] = useState('');
     const navigate = useNavigate();
     const {id} = useParams();
-//const roles = [...roless];
 
-//         setRoles(newRoles)
-    
     const saveUser = (e) => {
         e.preventDefault();
-        //roles = [roless];
-        //setRoles(a => [...a, roless]);
-        // console.log(password + "   pass pries")
-        // if(password.length < 6) {setPassword({passwordTemp})
-        //   // let password=passwordTemp;
-        // console.log("suveike" + password.length)};
-
-        //  console.log("pass po  " + password)
         const user = {username, password, email, roles, id};
-       console.log(user);
+
         if (id) {
             // update record
             userService.update(user, id)
@@ -56,33 +40,24 @@ const AddUser = () => {
             })
         }
     }
-    // const functionName = () => {
-    //     setRoles(current => [...current, {roless}]);
-    // }
 
     useEffect(() => {
-       // console.log(user)
+
         if (id) {
            
           userService.get(id)
                 .then(user => {
                     setUsername(user.data.username);
-                    setPasswordTemp(user.data.password);
+                    setPassword(user.data.password);
                     setEmail(user.data.email);
-                    //setRoles([{id: '1', name: 'ROLE_USER'},{id: '2', name: 'ROLE_ADMIN'}]);
-                    //setRoles(current => [...current, {roless}]);
-                    setRoles(user.data.roles)
-                console.log('selected role', user.data.role)
-                    
-            })
-            .catch(error => {
-                console.log('Something went wrong', error);
-            })
+                    setRoles(user.data.roles)              
+                })
+                .catch(error => {
+                    console.log('Something went wrong', error);
+                })
         }
-        roleService
-        .getAll()
-        .then((response) => {
-            console.log("Printing Role data", response.data);/////
+        roleService.getAll()
+            .then((response) => {
             setRoleList(response.data);
         })
         .catch((error) => {
@@ -105,20 +80,18 @@ const AddUser = () => {
                         placeholder="Įveskite username"
                      />
 
-                     
-
                 </div>
+                {!id &&
                 <div className="form-group">
                     <input
                        type="text"
                        className="form-control col-4"
-                       id="pavarde"
-                      // value={password}
+                       id="password"
                        onChange={(e) => setPassword(e.target.value)}
                        placeholder="Įveskite nauja slaptazodi"
                     /> 
 
-                </div>
+                </div>}
                 <div className="form-group">
                     <input
                        type="text"
@@ -132,7 +105,7 @@ const AddUser = () => {
                 </div>
                
 
-<div className="form-group">
+                <div className="form-group">
                     <Select     
                         value={roles}             
                         options={roleList}
@@ -145,40 +118,6 @@ const AddUser = () => {
                     </Select>
                 </div>
 
-            
-                {/* <div className="form-group">
-                    <input
-                       type="text"
-                       className="form-control col-4"
-                       id="adresas"
-                       value={adresas}
-                       onChange={(e) => setAddress(e.target.value)}
-                       placeholder="įveskite adresą"
-                    /> 
-
-                </div>
-                <div className="form-group">
-                    <input
-                       type="text"
-                       className="form-control col-4"
-                       id="telNumeris"
-                       value={telNumeris}
-                       onChange={(e) => setPhone(e.target.value)}
-                       placeholder="įveskite telefono numerį"
-                    /> 
-
-                </div>
-                <div className="form-group">
-                    <input
-                       type="text"
-                       className="form-control col-4"
-                       id="klientoStatusas"
-                       value={klientoStatusas}
-                       onChange={(e) => setCustomerStatus(e.target.value)}
-                       placeholder="įveskite kliento statusą"
-                    /> 
-
-                </div> */}
                 <br />
                 <div>
                     <button onClick={(e) => saveUser(e)}

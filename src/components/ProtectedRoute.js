@@ -1,13 +1,17 @@
 import React, { Component } from "react";
-import { Route, redirect } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ auth, component: Component, ...rest})=>{
-    return(
-        <Route {...rest} render={(props) => {
-            if(auth) return <Component{...props}/>;
-            if(!auth) return <redirect to={{path:"/register", state: {from: props.location}}}/>
-        }}
+const ProtectedRoute = ({ element: C, appProps, ...rest })=>{
+    return (
+        <Route
+          {...rest}
+          render={props =>
+            appProps.roles.includes("ROLE_ADMIN")
+              ? <C {...props} {...appProps} />
+              : <Navigate
+                  to={`/login`}
+                />}
         />
-     );
-    };
+      );
+          }
     export default ProtectedRoute;
