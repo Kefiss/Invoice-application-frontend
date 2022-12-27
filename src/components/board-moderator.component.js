@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import UserService from "../services/user.service";
+
+import TestService from "../services/test.service";
 import EventBus from "../common/EventBus";
 
 export default class BoardModerator extends Component {
@@ -12,7 +13,7 @@ export default class BoardModerator extends Component {
   }
 
   componentDidMount() {
-    UserService.getModeratorBoard().then(
+    TestService.getModeratorBoard().then(
       response => {
         this.setState({
           content: response.data

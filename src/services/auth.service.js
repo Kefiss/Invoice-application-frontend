@@ -33,6 +33,13 @@ class AuthService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user'));;
   }
+
+  recover(email) {
+    return axios
+      .post(API_URL + "recover", {
+        email     
+      });
+  }
 }
 
 export default new AuthService();

@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
+import {Link} from "react-router-dom";
 import AuthService from "../services/auth.service";
 import { withRouter } from '../common/with-router';
-
+import  { withTranslation}  from "react-i18next";
 const required = value => {
   if (!value) {
     return (
@@ -15,13 +16,11 @@ const required = value => {
   }
 };
 class Login extends Component {
-  
   constructor(props) {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
-
     this.state = {
       username: "",
       password: "",
@@ -29,33 +28,27 @@ class Login extends Component {
       message: ""
     };
   }
-
   onChangeUsername(e) {
     this.setState({
       username: e.target.value
     });
   }
-
   onChangePassword(e) {
     this.setState({
       password: e.target.value
     });
   }
-
   handleLogin(e) {
     e.preventDefault();
-
     this.setState({
       message: "",
       loading: true
     });
-
     this.form.validateAll();
- 
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.login(this.state.username, this.state.password).then(
         () => {
-          this.props.router.navigate("/");
+          this.props.router.navigate("/profile");
           window.location.reload();
         },
         error => {
@@ -65,7 +58,6 @@ class Login extends Component {
               error.response.data.message) ||
             error.message ||
             error.toString();
-
           this.setState({
             loading: false,
             message: resMessage
@@ -78,8 +70,8 @@ class Login extends Component {
       });
     }
   }
-
   render() {
+    const {t} = this.props
     return (
       <div className="col-md-12">
         <div className="card card-container">
@@ -88,7 +80,6 @@ class Login extends Component {
             alt="profile-img"
             className="profile-img-card"
           />
-
           <Form
             onSubmit={this.handleLogin}
             ref={c => {
@@ -96,7 +87,7 @@ class Login extends Component {
             }}
           >
             <div className="form-group">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="username">{t('username')}</label>
               <Input
                 type="text"
                 className="form-control"
@@ -106,9 +97,8 @@ class Login extends Component {
                 validations={[required]}
               />
             </div>
-
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{t('password')}</label>
               <Input
                 type="password"
                 className="form-control"
@@ -118,7 +108,11 @@ class Login extends Component {
                 validations={[required]}
               />
             </div>
-
+            <div>
+              <Link to={"/recover"}>
+                 {t('recover')}
+              </Link>
+            </div>
             <div className="form-group">
               <button
                 className="btn btn-primary btn-block"
@@ -127,10 +121,9 @@ class Login extends Component {
                 {this.state.loading && (
                   <span className="spinner-border spinner-border-sm"></span>
                 )}
-                <span>Login</span>
+                <span>{t('login')}</span>
               </button>
             </div>
-
             {this.state.message && (
               <div className="form-group">
                 <div className="alert alert-danger" role="alert">
@@ -145,10 +138,15 @@ class Login extends Component {
               }}
             />
           </Form>
+          <div>
+              {t('noAccount')}
+              <Link to={"/register"}>
+              {t('signUp')}
+              </Link>
+          </div>
         </div>
       </div>
     );
   }
 }
-
-export default withRouter(Login);
+export default withRouter(withTranslation()(Login));

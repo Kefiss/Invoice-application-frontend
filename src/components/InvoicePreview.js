@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,navigate, useNavigate } from "react-router-dom";
 import invoiceService from "../services/invoice.service";
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/invoice.css";
@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useReactToPrint } from "react-to-print";
 import codeAcademy from "../images/codeacademy.png";
 import AuthService from "../services/auth.service";
+import { t } from "i18next";
 
 const InvoicePreview = () => {
   const [invoice, setInvoice] = useState([]);
@@ -48,7 +49,8 @@ const InvoicePreview = () => {
     invoiceItems.map(
       (item, index) => (
         (list[index] =
-          invoiceItems[index].item.bazineKaina *
+          // invoiceItems[index].item.bazineKaina *
+          invoiceItems[index].price *
           Number(invoiceItems[index].quantity)),
         setSuma(list),
         console.log("numeris: " + list[index]), /////////
@@ -59,16 +61,21 @@ const InvoicePreview = () => {
       )
     );
   };
+  
+  const navigate =useNavigate();
 
   return (
     <div className="saskaitos-sablonas">
       <div style={{ textAlign: "center" }}>
         <button onClick={handlePrint} className="btn btn-outline-primary">
-          Spausdinti
+        {t('btnPrint')}
+        </button>
+        <button onClick={() => navigate(-1)} className="btn btn-outline-primary">
+        {t('btnBack')}
         </button>
       </div>
       <div className="bendras" ref={componentRef}>
-        <img className="invoice-logo" src={codeAcademy} />
+        <img className="invoice-logo" src={codeAcademy} alt='logo'/>
 
         <table className="sask-info">
           <tbody>
@@ -124,7 +131,7 @@ const InvoicePreview = () => {
                 <td> {invoiceItems[index].quantity} </td>
                 <td style={{ textAlign: "right" }}>
                   {" "}
-                  {invoiceItems[index].item.bazineKaina}{" "}
+                  {invoiceItems[index].price}{" "}
                 </td>
                 <td> {suma[index].toFixed(2)} </td>
               </tr>
@@ -171,15 +178,15 @@ const InvoicePreview = () => {
         </table>
         <p style={{ marginTop: "25px", fontSize: "14px" }}>Pastabos: </p>
         <p style={{ marginTop: "75px", fontSize: "18px" }}>
-          Sąskaitą išrašė: <strong>{user.username}</strong>
+          Sąskaitą išrašė: <strong>{user.name} {user.lastName}</strong>
         </p>
         <hr />
-        <p style={{ marginTop: "25px", fontSize: "18px" }}>Sąskaitą gavo: </p>
+        <p style={{ marginTop: "25px", fontSize: "18px" }}>Sąskaitą gavo: <strong>{customerId.vardas} {customerId.pavarde}</strong></p>
         <hr />
       </div>
       <br />
       <div style={{ textAlign: "center" }}>
-        <Link to="/invoices">Atgal į sąrašą</Link>
+        <Link to="/invoices">{t('btnBack')}</Link>
       </div>
     </div>
   );

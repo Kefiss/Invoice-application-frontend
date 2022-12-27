@@ -3,6 +3,7 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
+import  { withTranslation}  from "react-i18next";
 
 import AuthService from "../services/auth.service";
 
@@ -36,17 +37,18 @@ const vusername = value => {
   }
 };
 
+// const {t} = this.props;
 const vpassword = value => {
   if (value.length < 6 || value.length > 40) {
     return (
       <div className="alert alert-danger" role="alert">
-        The password must be between 6 and 40 characters.
+        "The password must be between 6 and 40 characters."
       </div>
     );
   }
 };
 
-export default class Register extends Component {
+ class Register extends Component {
   constructor(props) {
     super(props);
     this.handleRegister = this.handleRegister.bind(this);
@@ -121,6 +123,7 @@ export default class Register extends Component {
   }
 
   render() {
+    const {t} = this.props
     return (
       <div className="col-md-12">
         <div className="card card-container">
@@ -139,7 +142,7 @@ export default class Register extends Component {
             {!this.state.successful && (
               <div>
                 <div className="form-group">
-                  <label htmlFor="username">Username</label>
+                  <label htmlFor="username">{t('username')}</label>
                   <Input
                     type="text"
                     className="form-control"
@@ -151,7 +154,7 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">{t('email')}</label>
                   <Input
                     type="text"
                     className="form-control"
@@ -163,7 +166,7 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">{t('password')}</label>
                   <Input
                     type="password"
                     className="form-control"
@@ -175,7 +178,7 @@ export default class Register extends Component {
                 </div>
 
                 <div className="form-group">
-                  <button className="btn btn-primary btn-block">Sign Up</button>
+                  <button className="btn btn-primary btn-block">{t('signUp')}</button>
                 </div>
               </div>
             )}
@@ -206,3 +209,4 @@ export default class Register extends Component {
     );
   }
 }
+export default withTranslation()(Register);

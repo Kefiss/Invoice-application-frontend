@@ -2,7 +2,10 @@ label {
   display: block;
   margin-top: 10px;
 }
-
+.scope {
+  height: 100%;
+  width: 100%;
+}
 .card-container.card {
   max-width: 350px !important;
   padding: 40px 40px;

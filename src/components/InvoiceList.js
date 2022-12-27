@@ -3,6 +3,7 @@ import invoiceService from "../services/invoice.service";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "../services/auth.service";
+import { t } from "i18next";
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState([]);
@@ -51,7 +52,7 @@ const InvoiceList = () => {
  
   return (
     <div className="container">
-      <h3>Sąskaitų sąrašas</h3>
+      <h3>{t('invoicelist')}</h3>
       <hr />
       <div>
       <input
@@ -59,18 +60,18 @@ const InvoiceList = () => {
           placeholder="Search here"
           onChange={handleChange}
           value={searchInput} />
-        <Link to = "/invoices/add" className="btn btn-outline-primary btn-block btn-lg mb-2">Pridėti sąskaitą</Link>
+        <Link to = "/invoices/add" className="btn btn-outline-primary btn-block btn-lg mb-2">{t('addInvoice')}</Link>
         <table
           border="1"
           cellPadding="10"
           className="table table-border table-striped"
         >
           <thead className="thead-dark">
-            <tr>
-              <th>Sąskaitos numeris</th>
-              <th>Sąskaitos data</th>
-              <th>Klientas</th>
-              <th>Veiksmai</th>
+          <tr>
+              <th>{t('invoiceNumber')}</th>
+              <th>{t('invoiceDate')}</th>
+              <th>{t('customer')}</th>
+              <th>{t('actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -81,11 +82,11 @@ const InvoiceList = () => {
                 <td>{invoice.customerId.vardas + " " + invoice.customerId.pavarde}</td>
                 <td>
                 <Link to={`/invoices/invoicepreview/${invoice.id}`} className="btn btn-outline-info mr-2">
-                    Peržiura
+                {t('preview')}
                   </Link>
                 
                   <Link to={`/invoices/edit/${invoice.id}`} className="btn btn-outline-success">
-                    Atnaujinti
+                  {t('edit')}
                   </Link>
                   {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) &&
                   <button 
@@ -94,7 +95,7 @@ const InvoiceList = () => {
                       handleDelete(invoice.id);
                     }}
                   >
-                    Ištrinti
+                    {t('delete')}
                   </button>}
                   
                 </td>

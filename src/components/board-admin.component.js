@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import UserService from "../services/user.service";
+
+import TestService from "../services/test.service";
 import EventBus from "../common/EventBus";
 
 export default class BoardAdmin extends Component {
@@ -12,7 +13,7 @@ export default class BoardAdmin extends Component {
   }
 
   componentDidMount() {
-    UserService.getAdminBoard().then(
+    TestService.getAdminBoard().then(
       response => {
         this.setState({
           content: response.data

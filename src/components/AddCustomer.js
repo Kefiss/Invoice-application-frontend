@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {useEffect, useState} from "react";
 import customerService from "../services/customer.service";
+import { t } from "i18next";
 
 const AddCustomer = () => {
   const [vardas, setFirstName] = useState('');
@@ -65,7 +66,7 @@ const AddCustomer = () => {
 
     return(
         <div className="container">
-            <h3>Pridėti klientą</h3>
+            <h3>{t('addCustomer')}</h3>
             <hr/>
             <form>
                 <div className="form-group">
@@ -75,7 +76,7 @@ const AddCustomer = () => {
                         id="vardas"
                         value={vardas}
                         onChange={(e) => setFirstName(e.target.value)}
-                        placeholder="Įveskite vardą"
+                        placeholder={t('enterCustomerName')}
                      />
 
                 </div>
@@ -86,7 +87,7 @@ const AddCustomer = () => {
                        id="pavarde"
                        value={pavarde}
                        onChange={(e) => setLastName(e.target.value)}
-                       placeholder="Įveskite pavardę"
+                       placeholder={t('enterCustomerLastName')}
                     /> 
 
                 </div>
@@ -97,7 +98,7 @@ const AddCustomer = () => {
                        id="email"
                        value={email}
                        onChange={(e) => setEmail(e.target.value)}
-                       placeholder="įveskite el. paštą"
+                       placeholder={t('enterCustomerEmail')}
                     /> 
 
                 </div>
@@ -108,7 +109,7 @@ const AddCustomer = () => {
                        id="tipas"
                        value={tipas}
                        onChange={(e) => setType(e.target.value)}
-                       placeholder="įveskite tipą"
+                       placeholder={t('enterCustomerType')}
                     /> 
 
                 </div>
@@ -119,7 +120,7 @@ const AddCustomer = () => {
                        id="adresas"
                        value={adresas}
                        onChange={(e) => setAddress(e.target.value)}
-                       placeholder="įveskite adresą"
+                       placeholder={t('enterCustomerAddress')}
                     /> 
 
                 </div>
@@ -130,29 +131,27 @@ const AddCustomer = () => {
                        id="telNumeris"
                        value={telNumeris}
                        onChange={(e) => setPhone(e.target.value)}
-                       placeholder="įveskite telefono numerį"
+                       placeholder={t('enterCustomerPhone')}
                     /> 
 
                 </div>
-                <div className="form-group">
-                    <input
-                       type="text"
-                       className="form-control col-4"
-                       id="klientoStatusas"
-                       value={klientoStatusas}
-                       onChange={(e) => setCustomerStatus(e.target.value)}
-                       placeholder="įveskite kliento statusą"
-                    /> 
-
+                <div className="form-group ">
+                    <select className="form-control col-4" onChange={(e) => setCustomerStatus(e.target.value)}>
+                     <option value="Aktyvus">{t('active')}</option>
+                    <option value="Neaktyvus">{t('blocked')}</option>
+                    </select>   
                 </div>
                 <br />
+                <hr/>
                 <div>
                     <button onClick={(e) => saveCustomer(e)}
                     className="btn btn-primary">Save</button>
+                    <button onClick={() => navigate('/customers')} className="btn btn-info ml-2 ">
+                    {t('btnBack')}
+                    </button>
                 </div>
             </form>
             <hr/>
-            <Link to="/customers">Atgal į sąrašą</Link>
         </div>
     )
 };

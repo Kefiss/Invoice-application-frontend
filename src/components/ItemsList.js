@@ -3,11 +3,29 @@ import itemService from "../services/item.service";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import AuthService from "../services/auth.service";
+import FilterItems from "./FilterItems";
+import { t } from "i18next";
+
 const ItemsList = () => {
   const [items, setItems] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const user = AuthService.getCurrentUser().roles;
- 
+  const [filterTextValue, setFilterTextValue] = useState('All');
+  const filteredItemList = items.filter((product) => {
+    if(filterTextValue === 'Aktyvus'){
+      return product.statusas === 'Aktyvus';
+    } else if(filterTextValue === 'Neaktyvus'){
+      return product.statusas === 'Neaktyvus';
+    } else {
+      return product;
+    }
+  });
+
+  const onFilterValueSelected = (filterValue) => { setFilterTextValue(filterValue)}
+  useEffect(() => {
+    init();
+  }, []);
+
   useEffect(() => {
     init();
   }, []);
@@ -42,13 +60,13 @@ const ItemsList = () => {
   
   };
 
-  const filtered = items.filter(c => {
+  const filtered = filteredItemList.filter(c => {//ciaa
     return c.pavadinimas.toLowerCase().includes(searchInput.toLowerCase()) || c.aprasymas.toLowerCase().includes(searchInput.toLowerCase());
   });
 
   return (
     <div className="container">
-      <h3>Prekių sąrašas</h3>
+      <h3>{t('itemslist')}</h3>
       <hr />
       <div>
       <input
@@ -61,8 +79,9 @@ const ItemsList = () => {
           to="/items/add"
           className="btn btn-outline-primary btn-block btn-lg mb-2"
         >
-          Pridėti prekę
+          {t('addItem')}
         </Link>}
+        <FilterItems filterValueSelected={onFilterValueSelected}></FilterItems>
         <table
           border="1"
           cellPadding="10"
@@ -70,17 +89,17 @@ const ItemsList = () => {
         >
           <thead className="thead-dark">
             <tr>
-              <th>Pavadinimas</th>
-              <th>Prekės kodas</th>
-              <th>Aprašymas</th>
-              <th>Grupė</th>
-              <th>Statusas</th>
+            <th>{t('itemname')}</th>
+              <th>{t('itemcode')}</th>
+              <th>{t('itemdesc')}</th>
+              <th>{t('itemgroup')}</th>
+              <th>{t('itemstatus')}</th>
               {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) &&
-              <th>Veiksmai</th>}
+              <th>{t('actions')}</th>}
             </tr>
           </thead>
           <tbody>
-          {filtered.map((item) => (
+          {filtered.map((item) => (///// cia
               <tr key={item.id}>
                 <td>{item.pavadinimas}</td>
                 <td>{item.kodas}</td>
@@ -93,7 +112,7 @@ const ItemsList = () => {
                     to={`/items/edit/${item.id}`}
                     className="btn btn-outline-success mt-2 mr-2"
                   >
-                    Atnaujinti
+                    {t('edit')}
                   </Link>
                   <button
                     className="btn btn-outline-danger mt-2"
@@ -101,7 +120,7 @@ const ItemsList = () => {
                       handleDelete(item.id);
                     }}
                   >
-                    Ištrinti
+                    {t('delete')}
                   </button>
                 </td>}
               </tr>

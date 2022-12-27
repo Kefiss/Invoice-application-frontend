@@ -4,20 +4,21 @@ import {useEffect, useState} from "react";
 import userService from "../services/user.service";
 import Select from "react-select"
 import roleService from "../services/role.service";
+import { t } from "i18next";
 
 const AddUser = () => {
     const [username, setUsername] = useState('');
+    const [name, setName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [roles, setRoles] = useState([]);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [roleList, setRoleList] = useState([]);
     const navigate = useNavigate();
     const {id} = useParams();
-
     const saveUser = (e) => {
         e.preventDefault();
-        const user = {username, password, email, roles, id};
-
+        const user = {username, name, lastName, password, email, roles, id};
         if (id) {
             // update record
             userService.update(user, id)
@@ -40,14 +41,13 @@ const AddUser = () => {
             })
         }
     }
-
     useEffect(() => {
-
         if (id) {
-           
           userService.get(id)
                 .then(user => {
                     setUsername(user.data.username);
+                    setName(user.data.name);
+                    setLastName(user.data.lastName);
                     setPassword(user.data.password);
                     setEmail(user.data.email);
                     setRoles(user.data.roles)              
@@ -67,7 +67,7 @@ const AddUser = () => {
 
     return(
         <div className="container">
-            <h3>Pridėti useri</h3>
+            <h3>{t('adduser')}</h3>
             <hr/>
             <form>
                 <div className="form-group">
@@ -77,9 +77,28 @@ const AddUser = () => {
                         id="vardas"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Įveskite username"
+                        placeholder={t('enterUserName')}
                      />
-
+                </div>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        className="form-control col-4"
+                        id="vardas"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder={t('enterName')}
+                     />
+                </div>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        className="form-control col-4"
+                        id="pavardė"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder={t('enterLastName')}
+                     />
                 </div>
                 {!id &&
                 <div className="form-group">
@@ -88,9 +107,8 @@ const AddUser = () => {
                        className="form-control col-4"
                        id="password"
                        onChange={(e) => setPassword(e.target.value)}
-                       placeholder="Įveskite nauja slaptazodi"
+                       placeholder={t('enterPassword')}
                     /> 
-
                 </div>}
                 <div className="form-group">
                     <input
@@ -99,12 +117,9 @@ const AddUser = () => {
                        id="email"
                        value={email}
                        onChange={(e) => setEmail(e.target.value)}
-                       placeholder="įveskite el. paštą"
+                       placeholder={t('enterEmail')}
                     /> 
-
                 </div>
-               
-
                 <div className="form-group">
                     <Select     
                         value={roles}             
@@ -113,19 +128,23 @@ const AddUser = () => {
                         getOptionValue={a => a}  
                         className=" col-4"
                         id="roles"
+                        placeholder={t('select')}
                         onChange={(e) => setRoles(e)} 
                         > 
                     </Select>
-                </div>
-
+                    </div>
                 <br />
+                <hr/>
                 <div>
                     <button onClick={(e) => saveUser(e)}
-                    className="btn btn-primary">Save</button>
+                    className="btn btn-primary">{t('btnSave')}</button>
+                    <button onClick={() => navigate('/users')} className="btn btn-info ml-2 ">
+                    {t('btnBack')}
+                    </button>
                 </div>
             </form>
             <hr/>
-            <Link to="/users">Atgal į sąrašą</Link>
+
         </div>
     )
 };
