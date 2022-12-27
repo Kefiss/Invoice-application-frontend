@@ -1,7 +1,10 @@
+import { t } from "i18next";
+
 const NotFound = () => {
   return (
     <div>
-      <p>The page you are looking for is not yet developed</p>
+      <h3>{t('notExist')}</h3>
+
     </div>
   );
 };

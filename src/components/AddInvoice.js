@@ -1,4 +1,4 @@
-import React from "react";
+import React, { isValidElement } from "react";
 import Select from "react-select"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {useEffect, useState} from "react";
@@ -14,7 +14,7 @@ const AddInvoice = () => {
     const [invoiceNumber, setInvoiceNumber] = useState('');
     const [myDate, setDate] = useState('');
     const [customer, setCustomer] = useState([]);
-    const [invoiceItems, setInvoiceItems] = useState([{ item: "", quantity: "", price: "" }]);
+    const [invoiceItems, setInvoiceItems] = useState([{ item: "", quantity: "">0, price: "" }]);
     const navigate = useNavigate();
     const {id} = useParams();
     const [customerId, setCustomers] = useState([]);
@@ -45,11 +45,13 @@ const AddInvoice = () => {
 
     const saveInvoice = (e) => {
         e.preventDefault();
+      
         const invoice = {invoiceNumber, myDate, invoiceItems, customerId ,id } ;
 
         if (id) {
             invoiceService.update(invoice)
                 .then(response => {
+                    handleChange("",0,"quantity")///
                     console.log('Invoice data updated successfully', response.data);////
                     navigate('/invoices'); 
                 })
@@ -88,7 +90,9 @@ const AddInvoice = () => {
 
 
     let addFormFields = () => {  /////////////////////
-        setInvoiceItems([...invoiceItems, { item: "", quantity: "", price: ""}])
+        setInvoiceItems([...invoiceItems, { item: "", 
+        quantity: "">0
+        , price: ""}])
       }
     
     let removeFormFields = (i) => {
@@ -96,18 +100,26 @@ const AddInvoice = () => {
         newInvoiceItems.splice(i, 1);
         setInvoiceItems(newInvoiceItems)
     }
-
+   
     let handleChange = (option, index, name) => {
-        
+  
         const value = option;
        
         const list = [...invoiceItems];
        list[index][name] = value;
-        list[index]["price"] = option.bazineKaina;
-        //
-        if (option.price > 0) { 
-            console.log("suveikeee")
-            list[index][name] = value.price;
+
+       
+       if(option.bazineKaina != null) {
+            list[index]["price"] = option.bazineKaina;
+       }
+        
+
+        if (name === "price" && value > 0) { 
+            list[index][name] = value;
+        }
+        
+        if (name === "quantity") { 
+            console.log("suve");
         }
         setInvoiceItems(list);
      }
@@ -176,12 +188,16 @@ const AddInvoice = () => {
                                 />
                             
                                 <input 
-                                    type="text"
+                                    type="number"
                                     name="quantity"
                                     className="form-control col-4" 
-                                    placeholder={t('enterQuantity')}  
+                                    placeholder={t('enterQuantity')} 
+                                   // min="1"
+                                    //required
                                     value={element.quantity}     
-                                    onChange = {e => handleChange(e.target.value, index, "quantity")}                              
+                                 //   onChange = {e => handleChange(e.target.value, index, "quantity")}  
+                                    onChange = {e => e.target.value>0 ? handleChange(e.target.value, index, "quantity"):handleChange("", index, "quantity")}  
+                                   // e.target.value>=1 ? handleChange(e.target.value, index, "quantity"): setVal("")                     
                                 />
                                 <input 
                                //defaultValue={ element.item.bazineKaina = element.price}

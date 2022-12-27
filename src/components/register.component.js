@@ -37,6 +37,26 @@ const vusername = value => {
   }
 };
 
+const vname = value => {
+  if (value.length > 20) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        The name must be less than 20 characters.
+      </div>
+    );
+  }
+};
+
+const vlastName = value => {
+  if (value.length > 20) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        The last name must be less than 20 characters.
+      </div>
+    );
+  }
+};
+
 // const {t} = this.props;
 const vpassword = value => {
   if (value.length < 6 || value.length > 40) {
@@ -53,11 +73,15 @@ const vpassword = value => {
     super(props);
     this.handleRegister = this.handleRegister.bind(this);
     this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.onChangename = this.onChangename.bind(this);
+    this.onChangelastName = this.onChangelastName.bind(this);
     this.onChangeEmail = this.onChangeEmail.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
 
     this.state = {
       username: "",
+      name: "",
+      lastName: "",
       email: "",
       password: "",
       successful: false,
@@ -68,6 +92,18 @@ const vpassword = value => {
   onChangeUsername(e) {
     this.setState({
       username: e.target.value
+    });
+  }
+
+  onChangename(e) {
+    this.setState({
+      name: e.target.value
+    });
+  }
+
+  onChangelastName(e) {
+    this.setState({
+      lastName: e.target.value
     });
   }
 
@@ -96,6 +132,8 @@ const vpassword = value => {
     if (this.checkBtn.context._errors.length === 0) {
       AuthService.register(
         this.state.username,
+        this.state.name,
+        this.state.lastName,
         this.state.email,
         this.state.password
       ).then(
@@ -152,6 +190,28 @@ const vpassword = value => {
                     validations={[required, vusername]}
                   />
                 </div>
+                <div className="form-group">
+                  <label htmlFor="name">{t('name')}</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="name"
+                    value={this.state.name}
+                    onChange={this.onChangename}
+                    validations={[required, vname]}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="lastName">{t('lastName')}</label>
+                  <Input
+                    type="text"
+                    className="form-control"
+                    name="lastName"
+                    value={this.state.lastName}
+                    onChange={this.onChangelastName}
+                    validations={[required, vlastName]}
+                  />
+                </div>
 
                 <div className="form-group">
                   <label htmlFor="email">{t('email')}</label>
@@ -178,7 +238,7 @@ const vpassword = value => {
                 </div>
 
                 <div className="form-group">
-                  <button className="btn btn-primary btn-block">{t('signUp')}</button>
+                  <button className="btn btn-primary btn-block">{t('signup')}</button>
                 </div>
               </div>
             )}

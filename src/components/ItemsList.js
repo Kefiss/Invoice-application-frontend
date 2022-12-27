@@ -66,22 +66,25 @@ const ItemsList = () => {
 
   return (
     <div className="container">
-      <h3>{t('itemslist')}</h3>
+      <h3>{t('itemsList')}</h3>
       <hr />
       <div>
       <input
+          className=" btn-outline-primary bg-white text-secondary btn-block btn-lg mb-2"
           type="search"
-          placeholder="Search here"
+          placeholder={t('itemSearch')}
           onChange={handleChange}
           value={searchInput} />
-      {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) &&
+          <FilterItems filterValueSelected={onFilterValueSelected}></FilterItems>
+          <hr />
+      {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MANAGER")) &&
         <Link
           to="/items/add"
           className="btn btn-outline-primary btn-block btn-lg mb-2"
         >
           {t('addItem')}
         </Link>}
-        <FilterItems filterValueSelected={onFilterValueSelected}></FilterItems>
+        
         <table
           border="1"
           cellPadding="10"
@@ -89,12 +92,12 @@ const ItemsList = () => {
         >
           <thead className="thead-dark">
             <tr>
-            <th>{t('itemname')}</th>
-              <th>{t('itemcode')}</th>
-              <th>{t('itemdesc')}</th>
-              <th>{t('itemgroup')}</th>
-              <th>{t('itemstatus')}</th>
-              {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) &&
+              <th>{t('itemName')}</th>
+              <th>{t('itemCode')}</th>
+              <th>{t('itemDescription')}</th>
+              <th>{t('itemGroup')}</th>
+              <th>{t('itemStatus')}</th>
+              {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MANAGER")) &&
               <th>{t('actions')}</th>}
             </tr>
           </thead>
@@ -106,13 +109,13 @@ const ItemsList = () => {
                 <td>{item.aprasymas}</td>
                 <td>{item.grupe}</td>
                 <td>{item.statusas}</td>
-                {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) &&
+                {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MANAGER")) &&
                 <td>
                   <Link
                     to={`/items/edit/${item.id}`}
                     className="btn btn-outline-success mt-2 mr-2"
                   >
-                    {t('edit')}
+                    {t('btnEdit')}
                   </Link>
                   <button
                     className="btn btn-outline-danger mt-2"
@@ -120,7 +123,7 @@ const ItemsList = () => {
                       handleDelete(item.id);
                     }}
                   >
-                    {t('delete')}
+                    {t('btnDelete')}
                   </button>
                 </td>}
               </tr>

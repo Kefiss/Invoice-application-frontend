@@ -6,7 +6,7 @@ class TestService {
   getUserBoard() {
     return axios.get(API_URL + `user`, { headers: authHeader() });
   }
-  getModeratorBoard() {
+  getManagerBoard() {
     return axios.get(API_URL + `mod`, { headers: authHeader() });
   }
   getAdminBoard() {

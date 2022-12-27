@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Navigate } from "react-router-dom";
 import AuthService from "../services/auth.service";
+import { t } from "i18next";
 
 export default class Profile extends Component {
   constructor(props) {
@@ -33,13 +34,15 @@ export default class Profile extends Component {
         <div>
         <header className="jumbotron">
           <h3>
-            <strong>{currentUser.username}</strong> Profile
+            {/* <strong>{currentUser.username}</strong> Profile */}
+            <strong>{t('hello')} {currentUser.name}</strong> 
+       
           </h3>
         </header>
         <p>
-          <strong>Token:</strong>{" "}
+          {/* <strong>Token:</strong>{" "}
           {currentUser.accessToken.substring(0, 20)} ...{" "}
-          {currentUser.accessToken.substr(currentUser.accessToken.length - 20)}
+          {currentUser.accessToken.substr(currentUser.accessToken.length - 20)} */}
         </p>
         <p>
           <strong>Id:</strong>{" "}
@@ -49,10 +52,10 @@ export default class Profile extends Component {
           <strong>Email:</strong>{" "}
           {currentUser.email}
         </p>
-        <strong>Authorities:</strong>
+        {/* <strong>Authorities:</strong> */}
         <ul>
-          {currentUser.roles &&
-            currentUser.roles.map((role, index) => <li key={index}>{role}</li>)}
+          {/* {currentUser.roles &&
+            currentUser.roles.map((role, index) => <li key={index}>{role}</li>)} */}
         </ul>
       </div>: null}
       </div>

@@ -1,4 +1,4 @@
-import finalPropsSelectorFactory from 'react-redux/es/connect/selectorFactory';
+import { t } from "i18next";
 
 let FilterCustomers = (props) => {
     function onFilterValueChanged(event){
@@ -7,9 +7,9 @@ let FilterCustomers = (props) => {
     return (
         <div className="Filter-area" onChange={onFilterValueChanged}>
             <select name="klientoStatusas">
-                <option value="All">All</option>
-                <option value="Aktyvus">Aktyvus</option>
-                <option value="Neaktyvus">Neatyvus</option>
+                <option value="All">{t('all')}</option>
+                <option value="Aktyvus">{t('active')}</option>
+                <option value="Neaktyvus">{t('blocked')}</option>
             </select>
         </div>
     );

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import {useEffect, useState} from "react";
 import customerService from "../services/customer.service";
 import { t } from "i18next";
+import Select from "react-select"
 
 const AddCustomer = () => {
   const [vardas, setFirstName] = useState('');
@@ -63,6 +64,11 @@ const AddCustomer = () => {
             })
         }
     },[])
+
+    const activityOption = [
+        { value: "Aktyvus", label: t('active')},
+        { value: "Neaktyvus", label: t('blocked')},
+    ];
 
     return(
         <div className="container">
@@ -135,17 +141,21 @@ const AddCustomer = () => {
                     /> 
 
                 </div>
-                <div className="form-group ">
-                    <select className="form-control col-4" onChange={(e) => setCustomerStatus(e.target.value)}>
-                     <option value="Aktyvus">{t('active')}</option>
-                    <option value="Neaktyvus">{t('blocked')}</option>
-                    </select>   
+                <div className="form-group">
+                    <Select 
+                        className="col-4 pl-0" 
+                        placeholder={t('enterCustomerStatus')} 
+                        options={activityOption}
+                        getOptionLabel = {a => a.label}
+                        getOptionValue = {a => a.value}
+                        onChange={(e) => setCustomerStatus(e.value)}>
+                    </Select>   
                 </div>
                 <br />
                 <hr/>
                 <div>
                     <button onClick={(e) => saveCustomer(e)}
-                    className="btn btn-primary">Save</button>
+                    className="btn btn-primary">{t('btnSave')}</button>
                     <button onClick={() => navigate('/customers')} className="btn btn-info ml-2 ">
                     {t('btnBack')}
                     </button>

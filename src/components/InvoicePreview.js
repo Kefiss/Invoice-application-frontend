@@ -1,4 +1,4 @@
-import { Link, useParams,navigate, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import invoiceService from "../services/invoice.service";
 import React, { useEffect, useState, useRef } from "react";
 import "../styles/invoice.css";
@@ -18,6 +18,7 @@ const InvoicePreview = () => {
   const [bendraSumaSuPvm, setBendraSumaSuPvm] = useState("");
   const [PVM, SetPvm] = useState([]);
   const user = AuthService.getCurrentUser();
+  const navigate = useNavigate();
 
   const componentRef = useRef();
 
@@ -30,7 +31,7 @@ const InvoicePreview = () => {
       invoiceService
         .get(id)
         .then((response) => {
-          console.log("Printing Invoices data", response.data); ///////////////////////////
+          console.log("Printing Invoices data", response.data);
           setInvoiceItems(response.data.invoiceItems);
           setCustomerId(response.data.customerId);
           setInvoice(response.data);
@@ -62,7 +63,7 @@ const InvoicePreview = () => {
     );
   };
   
-  const navigate =useNavigate();
+
 
   return (
     <div className="saskaitos-sablonas">
@@ -81,7 +82,7 @@ const InvoicePreview = () => {
           <tbody>
             <tr>
               <td>
-                <span>Sąskaitos Nr: </span>
+                <span>{t("invoiceNumber")}: </span>
                 {invoice.invoiceNumber}
               </td>
               <td></td>
@@ -89,7 +90,7 @@ const InvoicePreview = () => {
 
             <tr>
               <td>
-                <span>Pirkėjas: </span>
+                <span>{t("customer")}: </span>
                 {customerId.vardas} {customerId.pavarde}
               </td>
               <td></td>
@@ -97,7 +98,7 @@ const InvoicePreview = () => {
 
             <tr>
               <td>
-                <span>Data: </span>
+                <span>{t("date")}: </span>
                 {invoice.myDate}
               </td>
               <td></td>
@@ -105,7 +106,7 @@ const InvoicePreview = () => {
 
             <tr>
               <td>
-                <span>Adresas: </span>
+                <span>{t("customerAddress")}: </span>
                 {customerId.adresas}
               </td>
               <td></td>
@@ -116,11 +117,11 @@ const InvoicePreview = () => {
         <table className="line-items-container">
           <thead>
             <tr>
-              <th className="heading-description">Prekės kodas</th>
-              <th className="heading-description">Prekės pavadinimas</th>
-              <th className="heading-quantity">Kiekis</th>
-              <th className="heading-price">Kaina</th>
-              <th className="heading-subtotal">Suma</th>
+              <th className="heading-description">{t("itemcode")}</th>
+              <th className="heading-description">{t("itemname")}</th>
+              <th className="heading-quantity">{t("quantity")}</th>
+              <th className="heading-price">{t("price")}</th>
+              <th className="heading-subtotal">{t("sum")}</th>
             </tr>
           </thead>
           <tbody className="item">
@@ -141,15 +142,15 @@ const InvoicePreview = () => {
 
         <div>
           <p className="pvm">
-            <strong>Suma: </strong>
+            <strong>{t("sum")}: </strong>
             {bendraSuma}{" "}
           </p>
           <p className="pvm">
-            <strong>PVM (21%): </strong>
+            <strong>{t("vat")} (21%): </strong>
             {PVM}{" "}
           </p>
           <p className="pvm">
-            <strong>Suma su PVM: </strong>
+            <strong>{t("sumVat")}: </strong>
             {bendraSumaSuPvm}
           </p>
         </div>
@@ -157,16 +158,16 @@ const InvoicePreview = () => {
         <table className="line-items-container has-bottom-border">
           <thead>
             <tr>
-              <th> Mokėjimo informacija </th>
-              <th> Mokėjimo terminas </th>
-              <th> Viso: </th>
+              <th> {t("paymentInfo")} </th>
+              <th> {t("paymentTerm")} </th>
+              <th> {t("total")}: </th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>
                 <div style={{ textAlign: "left" }}>
-                  Mokėjimo sąskaitos Nr.: <strong>123567744</strong>
+                {t("accountNumber")}: <strong>123567744</strong>
                 </div>
               </td>
               <td style={{ textAlign: "left" }}>
@@ -176,18 +177,17 @@ const InvoicePreview = () => {
             </tr>
           </tbody>
         </table>
-        <p style={{ marginTop: "25px", fontSize: "14px" }}>Pastabos: </p>
+        <p style={{ marginTop: "25px", fontSize: "14px" }}>{t("remarks")}: </p>
         <p style={{ marginTop: "75px", fontSize: "18px" }}>
-          Sąskaitą išrašė: <strong>{user.name} {user.lastName}</strong>
+        {t("invoiceIssuedBy")}: <strong>{user.name} {user.lastName}</strong>
         </p>
         <hr />
-        <p style={{ marginTop: "25px", fontSize: "18px" }}>Sąskaitą gavo: <strong>{customerId.vardas} {customerId.pavarde}</strong></p>
+        <p style={{ marginTop: "25px", fontSize: "18px" }}>
+          {t("invoiceReceivedBy")}:<strong>{customerId.vardas} {customerId.pavarde}</strong>
+        </p>
         <hr />
       </div>
       <br />
-      <div style={{ textAlign: "center" }}>
-        <Link to="/invoices">{t('btnBack')}</Link>
-      </div>
     </div>
   );
 };

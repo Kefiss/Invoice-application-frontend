@@ -8,7 +8,7 @@ import Register from "./components/register.component";
 import Home from "./components/home.component";
 import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
-import BoardModerator from "./components/board-moderator.component";
+import BoardManager from "./components/board-manager.component";
 import BoardAdmin from "./components/board-admin.component";
 import ItemsList from "./components/ItemsList";
 import InvoiceList from "./components/InvoiceList";
@@ -27,7 +27,7 @@ import NotFound from "./components/NotFound";
 
 
 const isAdmin = (AuthService.getCurrentUser() != null && AuthService.getCurrentUser().roles.includes("ROLE_ADMIN"))
-const isModerator = (AuthService.getCurrentUser() != null && AuthService.getCurrentUser().roles.includes("ROLE_MODERATOR"))
+const isManager = (AuthService.getCurrentUser() != null && AuthService.getCurrentUser().roles.includes("ROLE_MANAGER"))
 const isUser = (AuthService.getCurrentUser() != null && AuthService.getCurrentUser().roles.includes("ROLE_USER"))
 class AppLogin extends Component {
   
@@ -36,7 +36,7 @@ class AppLogin extends Component {
     this.logOut = this.logOut.bind(this);
     this.state = {
       showUserBoard: false,
-      showModeratorBoard: false,
+      showManagerBoard: false,
       showAdminBoard: false,
       currentUser: undefined,
       showInvoices: false,
@@ -53,11 +53,11 @@ class AppLogin extends Component {
       this.setState({
         currentUser: user,
         showUserBoard: user.roles.includes("ROLE_USER"),
-        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
+        showManagerBoard: user.roles.includes("ROLE_MANAGER"),
         showAdminBoard: user.roles.includes("ROLE_ADMIN"),
-        showInvoices: user.roles.includes("ROLE_ADMIN") || user.roles.includes("ROLE_USER") || user.roles.includes("ROLE_MODERATOR"),       
-        showItems: user.roles.includes("ROLE_ADMIN") || user.roles.includes("ROLE_USER") || user.roles.includes("ROLE_MODERATOR"),
-        showCustomers: user.roles.includes("ROLE_ADMIN") || user.roles.includes("ROLE_USER") || user.roles.includes("ROLE_MODERATOR"),
+        showInvoices: user.roles.includes("ROLE_ADMIN") || user.roles.includes("ROLE_USER") || user.roles.includes("ROLE_MANAGER"),       
+        showItems: user.roles.includes("ROLE_ADMIN") || user.roles.includes("ROLE_USER") || user.roles.includes("ROLE_MANAGER"),
+        showCustomers: user.roles.includes("ROLE_ADMIN") || user.roles.includes("ROLE_USER") || user.roles.includes("ROLE_MANAGER"),
         showUsers: user.roles.includes("ROLE_ADMIN"),
       });
     }
@@ -74,7 +74,7 @@ class AppLogin extends Component {
   logOut() {
     AuthService.logout();
     this.setState({
-      showModeratorBoard: false,
+      showManagerBoard: false,
       showAdminBoard: false,
       currentUser: undefined,
       showUserBoard: false,
@@ -86,7 +86,7 @@ class AppLogin extends Component {
   }
 
   render() {
-    const { currentUser, showUserBoard, showModeratorBoard, showAdminBoard, showInvoices, showItems, showCustomers, showUsers } = this.state;
+    const { currentUser, showUserBoard, showManagerBoard, showAdminBoard, showInvoices, showItems, showCustomers, showUsers } = this.state;
     const {t} = this.props;
 
     return (
@@ -102,10 +102,10 @@ class AppLogin extends Component {
               </Link>
             </li>
 
-            {showModeratorBoard && (
+            {showManagerBoard && (
               <li className="nav-item">
                 <Link to={"/mod"} className="nav-link">
-                  {t('moderatorBoard')}
+                  {t('managerBoard')}
                 </Link>
               </li>
             )}
@@ -155,7 +155,7 @@ class AppLogin extends Component {
           {showUsers && (
               <li className="nav-item">
                 <Link to={"/users"} className="nav-link">
-                  Users
+                {t('users')}
                 </Link>
               </li>
             )}
@@ -165,12 +165,12 @@ class AppLogin extends Component {
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
                 <Link to={"/profile"} className="nav-link">
-                  {currentUser.username}
+                  {currentUser.name} {currentUser.lastName} 
                 </Link>
               </li>
               <li className="nav-item">
                 <a href="/login" className="nav-link" onClick={this.logOut}>
-                  {t('logOut')}
+                {t('logOut')}
                 </a>
               </li>
             </div>
@@ -178,17 +178,19 @@ class AppLogin extends Component {
             <div className="navbar-nav ml-auto">
               <li className="nav-item">
                 <Link to={"/login"} className="nav-link">
-                  {t('logIn')}
+                {t('logIn')}
                 </Link>
               </li>
 
               <li className="nav-item">
                 <Link to={"/register"} className="nav-link">
-                  {t('signUp')}
+                {t('signUp')}
                 </Link>
               </li>
             </div>
           )}
+          <div >
+           </div>
           <LanguageSwitcher/>
         </nav>
 
@@ -199,24 +201,24 @@ class AppLogin extends Component {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/profile" element={isAdmin || isModerator || isUser ? <Profile /> : <Navigate to ="/login"/>} />
+            <Route path="/profile" element={isAdmin || isManager || isUser ? <Profile /> : <Navigate to ="/login"/>} />
             
             <Route path="/user" element={<BoardUser />} />
-            <Route path="/mod" element={<BoardModerator />} />
+            <Route path="/mod" element={<BoardManager />} />
             <Route path="/admin" element={<BoardAdmin />} />
             
-            <Route path="/invoices" element={isAdmin || isModerator || isUser ? <InvoiceList /> : <Navigate to ="/login"/>}></Route>
-            <Route path="/invoices/add/" element={isAdmin || isModerator || isUser ? <AddInvoice /> : <Navigate to ="/login"/>}></Route>
-            <Route path="/invoices/edit/:id" element={isAdmin || isModerator || isUser ? <AddInvoice /> : <Navigate to ="/login"/>}></Route>
-            <Route path="/invoices/invoicepreview/:id" element={isAdmin || isModerator || isUser ? <InvoicePreview /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/invoices" element={isAdmin || isManager || isUser ? <InvoiceList /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/invoices/add/" element={isAdmin || isManager || isUser ? <AddInvoice /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/invoices/edit/:id" element={isAdmin || isManager || isUser ? <AddInvoice /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/invoices/invoicepreview/:id" element={isAdmin || isManager || isUser ? <InvoicePreview /> : <Navigate to ="/login"/>}></Route>
             
-            <Route path="/items" element={isAdmin || isModerator || isUser ? <ItemsList /> : <Navigate to ="/login"/>}></Route>
-            <Route path="/items/add/" element={isAdmin || isModerator ? <AddItem /> : <Navigate to ="/login"/>}></Route>
-            <Route path="/items/edit/:id" element={isAdmin || isModerator ? <AddItem /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/items" element={isAdmin || isManager || isUser ? <ItemsList /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/items/add/" element={isAdmin || isManager ? <AddItem /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/items/edit/:id" element={isAdmin || isManager ? <AddItem /> : <Navigate to ="/login"/>}></Route>
 
-            <Route path="/customers" element={isAdmin || isModerator || isUser ? <CustomersList /> : <Navigate to ="/login"/>}></Route>
-            <Route path="/customers/add" element={isAdmin || isModerator ? <AddCustomer /> : <Navigate to ="/login"/>}></Route>
-            <Route path="/customers/edit/:id" element={isAdmin || isModerator ? <AddCustomer /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/customers" element={isAdmin || isManager || isUser ? <CustomersList /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/customers/add" element={isAdmin || isManager ? <AddCustomer /> : <Navigate to ="/login"/>}></Route>
+            <Route path="/customers/edit/:id" element={isAdmin || isManager ? <AddCustomer /> : <Navigate to ="/login"/>}></Route>
            
             <Route path="/users/add/" element={isAdmin ? <AddUser /> : <Navigate to ="/login"/>}></Route>
             <Route path="/users/edit/:id" element={isAdmin ? <AddUser /> : <Navigate to ="/login"/>}></Route>

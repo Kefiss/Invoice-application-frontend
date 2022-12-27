@@ -7,8 +7,19 @@ import { t } from "i18next";
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState([]);
+  const [filterInvoiceValue] = useState('All');
+  const filteredInvoiceList = invoices.filter((product) => {
+    if(filterInvoiceValue === 'Aktyvus'){
+      return product.klientoStatusas === 'Aktyvus';
+    } else if(filterInvoiceValue === 'Neaktyvus'){
+      return product.klientoStatusas === 'Neaktyvus';
+    } else {
+      return product;
+    }
+  });
   const [searchInput, setSearchInput] = useState("");
   const user = AuthService.getCurrentUser().roles;
+  
   useEffect(() => {
     init();
   }, []);
@@ -46,20 +57,23 @@ const InvoiceList = () => {
   
   };
 
-  const filtered = invoices.filter(c => {
+  const filtered = filteredInvoiceList.filter(c => {
     return c.customerId.vardas.toLowerCase().includes(searchInput.toLowerCase()) || c.customerId.pavarde.toLowerCase().includes(searchInput.toLowerCase());
-  });
+  }); 
  
   return (
     <div className="container">
-      <h3>{t('invoicelist')}</h3>
+      <h3>{t('invoiceList')}</h3>
       <hr />
-      <div>
       <input
+          className=" btn-outline-primary bg-white text-secondary btn-block btn-lg mb-2"
           type="search"
-          placeholder="Search here"
+          placeholder={t('invoiceSearch')}
           onChange={handleChange}
           value={searchInput} />
+      <hr /> 
+      {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MANAGER"))}   
+      <div>
         <Link to = "/invoices/add" className="btn btn-outline-primary btn-block btn-lg mb-2">{t('addInvoice')}</Link>
         <table
           border="1"
@@ -80,22 +94,22 @@ const InvoiceList = () => {
                 <td>{invoice.invoiceNumber}</td>
                 <td>{invoice.myDate}</td>
                 <td>{invoice.customerId.vardas + " " + invoice.customerId.pavarde}</td>
-                <td>
+                <td style={{textAlign:"center"}}>
                 <Link to={`/invoices/invoicepreview/${invoice.id}`} className="btn btn-outline-info mr-2">
-                {t('preview')}
+                    {t('preview')}
                   </Link>
                 
                   <Link to={`/invoices/edit/${invoice.id}`} className="btn btn-outline-success">
-                  {t('edit')}
+                    {t('btnEdit')}
                   </Link>
-                  {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) &&
+                  {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MANAGER")) &&
                   <button 
                     className="btn btn-outline-danger ml-2"
                     onClick={(e) => {
                       handleDelete(invoice.id);
                     }}
                   >
-                    {t('delete')}
+                    {t('btnDelete')}
                   </button>}
                   
                 </td>

@@ -53,6 +53,7 @@ const CustomersList = () => {
       <hr />
       <div>
       <input
+        className=" btn-outline-primary bg-white text-secondary btn-block btn-lg mb-2"
           type="search"
           placeholder="Search here"
           onChange={handleChange}
@@ -80,12 +81,12 @@ const CustomersList = () => {
               <tr key={users.id}>
                 <td>{users.username}</td>
                 <td>{users.roles.name}</td>
-                <td> 
+                <td style={{textAlign:"center"}}>  
                   <Link
                     to={`/users/edit/${users.id}`}
                     className="btn btn-outline-success mt-2 mr-2"
                   >
-                    {t('edit')}
+                   {t('btnEdit')}
                   </Link>
                   <button
                     className="btn btn-outline-danger mt-2"
@@ -93,7 +94,7 @@ const CustomersList = () => {
                       handleDelete(users.id);
                     }}
                   >
-                    {t('delete')}
+                    {t('btnDelete')}
                   </button>
                 </td>
               </tr>

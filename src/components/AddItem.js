@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import {useEffect, useState} from "react";
 import itemService from "../services/item.service";
 import { t } from "i18next";
+import Select from "react-select";
 
 
 const AddItem = () => {
@@ -56,6 +57,11 @@ const AddItem = () => {
         }
     },[])
 
+    const activityOption = [
+        { value: "Aktyvus", label: t('active')},
+        { value: "Neaktyvus", label: t('blocked')},
+    ];
+
     return(
         <div className="container">
             <h3>{t('addItem')}</h3>
@@ -106,10 +112,15 @@ const AddItem = () => {
                 </div>
 
                 <div className="form-group ">
-                    <select className="form-control col-4" onChange={(e) => setItemStatus(e.target.value)}>
-                        <option value="Aktyvus">{t('active')}</option>
-                        <option value="Neaktyvus">{t('blocked')}</option>
-                    </select>
+                <Select 
+                        className="col-4 pl-0"
+                        // id="statusas" 
+                        placeholder={t('enterItemStatus')}
+                        options={activityOption}
+                        getOptionLabel = {a => a.label}
+                        getOptionValue = {a => a.value}
+                        onChange={(e) => setItemStatus(e.value)}>
+                    </Select>
                 </div>
                 <div className="form-group">
                     <input
@@ -125,7 +136,7 @@ const AddItem = () => {
                 <br />
                 <div>
                     <button onClick={(e) => saveItem(e)}
-                    className="btn btn-primary">Save</button>
+                    className="btn btn-primary">{t('btnSave')}</button>
                     <button onClick={() => navigate('/items')} className="btn btn-info ml-2 mt">
                     {t('btnBack')}
                     </button>

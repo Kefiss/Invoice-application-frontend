@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 
 import TestService from "../services/test.service";
-import EventBus from "../common/EventBus";
 
-export default class BoardModerator extends Component {
+import EventBus from "../common/EventBus";
+import { t } from "i18next";
+
+export default class BoardManager extends Component {
   constructor(props) {
     super(props);
 
@@ -13,7 +15,7 @@ export default class BoardModerator extends Component {
   }
 
   componentDidMount() {
-    TestService.getModeratorBoard().then(
+    TestService.getManagerBoard().then(
       response => {
         this.setState({
           content: response.data
@@ -40,7 +42,8 @@ export default class BoardModerator extends Component {
     return (
       <div className="container">
         <header className="jumbotron">
-          <h3>{this.state.content}</h3>
+          {/* <h3>{this.state.content}</h3> */}
+          <h3>{t('managerRoleDescription')}</h3>
         </header>
       </div>
     );

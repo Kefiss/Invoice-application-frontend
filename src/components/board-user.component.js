@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import TestService from "../services/test.service";
 import EventBus from "../common/EventBus";
+import { t } from "i18next";
 
 export default class BoardUser extends Component {
   constructor(props) {
@@ -40,7 +41,8 @@ export default class BoardUser extends Component {
     return (
       <div className="container">
         <header className="jumbotron">
-          <h3>{this.state.content}</h3>
+          <h3>{t('userRoleDescription')}</h3>
+          {/* <h3>{this.state.content}</h3> */}
         </header>
       </div>
     );

@@ -6,7 +6,6 @@ import AuthService from "../services/auth.service";
 import FilterCustomers from "./FilterCustomers";
 import { t } from "i18next";
 
-
 const CustomersList = () => {
   const [customers, setItems] = useState([]);
   const [filterCustomerValue, setFilterCustomerValue] = useState('All');
@@ -25,7 +24,6 @@ const CustomersList = () => {
   const onFilterValueSelected = (filterValue) => {
     setFilterCustomerValue(filterValue) }
 
-
   useEffect(() => {
     init();
   }, []);
@@ -41,6 +39,7 @@ const CustomersList = () => {
         console.log("Ups", error);
       });
   };
+  
   const handleDelete = (id) => {
     customerService
       .remove(id)
@@ -56,27 +55,30 @@ const CustomersList = () => {
     e.preventDefault();
     setSearchInput(e.target.value);
   };
-  const filtered = filteredCustomerList.filter(c => { //ciaa
+  const filtered = filteredCustomerList.filter(c => { 
     return c.vardas.toLowerCase().includes(searchInput.toLowerCase()) || c.pavarde.toLowerCase().includes(searchInput.toLowerCase());
   });
   return (
     <div className="container">
-      <h3>{t('clist')}</h3>
+      <h3>{t('customerList')}</h3>
       <hr />
       <div>
       <input
+       className=" btn-outline-primary bg-white text-secondary btn-block btn-lg mb-2"
           type="search"
-          placeholder="Search here"
+          placeholder={t('customerSearch')}
           onChange={handleChange}
           value={searchInput} />
-      {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) && 
+          <FilterCustomers filterValueSelected={onFilterValueSelected} className="btn-outline-primary bg-white text-secondary btn-block btn-lg mb-2"></FilterCustomers>
+      <hr/>
+      {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MANAGER")) && 
         <Link
           to="/customers/add"
           className="btn btn-outline-primary btn-block btn-lg mb-2"
         >
-          {t('addcustomer')}
+          {t('addCustomer')}
         </Link>}
-        <FilterCustomers filterValueSelected={onFilterValueSelected}></FilterCustomers>
+        
         <table
           border="1"
           cellPadding="10"
@@ -84,15 +86,15 @@ const CustomersList = () => {
         >
           <thead className="thead-dark">
           <tr>
-              <th>{t('cname')}</th>
-              <th>{t('clastname')}</th>
-              {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) &&<>
-              <th>{t('cemail')}</th>
-              <th>{t('ctype')}</th>
-              <th>{t('caddress')}</th>
-              <th>{t('cphone')}</th></>}
-              <th>{t('cstatus')}</th>
-              {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) &&
+              <th>{t('customerName')}</th>
+              <th>{t('customerLastName')}</th>
+              {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MANAGER")) &&<>
+              <th>{t('customerEmail')}</th>
+              <th>{t('customerType')}</th>
+              <th>{t('customerAddress')}</th>
+              <th>{t('customerPhone')}</th></>}
+              <th>{t('customerStatus')}</th>
+              {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MANAGER")) &&
               <th>{t('actions')}</th>}
             </tr>
           </thead>
@@ -101,19 +103,19 @@ const CustomersList = () => {
               <tr key={customer.id}>
                 <td>{customer.vardas}</td>
                 <td>{customer.pavarde}</td>
-                {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) &&<>
+                {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MANAGER")) &&<>
                 <td>{customer.email}</td>
                 <td>{customer.tipas}</td>
                 <td>{customer.adresas}</td>
                 <td>{customer.telNumeris}</td></>}
                 <td>{customer.klientoStatusas}</td>
-                {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MODERATOR")) &&
+                {(user.includes("ROLE_ADMIN") || user.includes("ROLE_MANAGER")) &&
                 <td>
                   <Link
                     to={`/customers/edit/${customer.id}`}
                     className="btn btn-outline-success mt-2 mr-2"
                   >
-                    {t('edit')}
+                    {t('btnEdit')}
                   </Link>
                   <button
                     className="btn btn-outline-danger mt-2"
@@ -121,7 +123,7 @@ const CustomersList = () => {
                       handleDelete(customer.id);
                     }}
                   >
-                    {t('delete')}
+                   {t('btnDelete')}
                   </button>
                 </td>}
               </tr>
